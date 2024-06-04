@@ -1,14 +1,19 @@
+import { Suspense } from "react";
 import Image from "next/image";
 import leftarrowIcon from "../../../public/left-arrow-icon.svg";
 import { getProject } from "../../../lib/dataCall";
 import { ProjectData } from "@/app/types/ProjectData";
 import Link from "next/link";
 import Form from "@/app/components/Form";
+import Loading from "@/app/components/Loading";
 
 async function EditProject({ params }: { params: { id: string } }) {
 	const id = params.id as string;
 
-	const projectData = (await getProject(id)) as ProjectData;
+	const FormComponent = async () => {
+		const projectData = (await getProject(id)) as ProjectData;
+		return <Form project={projectData} />;
+	};
 
 	return (
 		<div>
@@ -25,7 +30,9 @@ async function EditProject({ params }: { params: { id: string } }) {
 					<h1 className="text-black text-2xl font-medium">Item Details</h1>
 				</div>
 			</div>
-			<Form project={projectData} />
+			<Suspense fallback={<Loading />}>
+				<FormComponent />
+			</Suspense>
 		</div>
 	);
 }
