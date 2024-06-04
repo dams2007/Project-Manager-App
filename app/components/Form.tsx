@@ -6,6 +6,7 @@ import chevronDown from "../../public/chevron-down-icon.svg";
 import { Button } from "@/app/components/button";
 import { editProjects } from "../../lib/dataCall";
 import { ProjectData } from "../types/ProjectData";
+import { useRouter } from "next/navigation";
 
 import {
 	DropdownMenu,
@@ -20,6 +21,7 @@ interface FormProps {
 }
 
 const Form = ({ project }: FormProps) => {
+	const router = useRouter();
 	const [ProjectNameToEdit, setProjectNameToEdit] = useState<string>(
 		project.title
 	);
@@ -51,7 +53,7 @@ const Form = ({ project }: FormProps) => {
 				}
 			})
 			.then((updatedProject) => {
-				window.location.href = "/";
+				router.push("/");
 			})
 			.catch((err) => {
 				console.error("Error:", err);
