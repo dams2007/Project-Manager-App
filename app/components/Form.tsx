@@ -1,10 +1,8 @@
 "use client";
 import React, { FormEventHandler, useState } from "react";
-
 import Image from "next/image";
 import chevronDown from "../../public/chevron-down-icon.svg";
 import { Button } from "@/app/components/button";
-import { editProjects } from "../../lib/dataCall";
 import { ProjectData } from "../types/ProjectData";
 import { useRouter } from "next/navigation";
 
@@ -18,9 +16,10 @@ import {
 
 interface FormProps {
 	project: ProjectData;
+	onUpdate: (updatedProject: ProjectData) => Promise<void>;
 }
 
-const Form = ({ project }: FormProps) => {
+const Form = ({ project, onUpdate }: FormProps) => {
 	const router = useRouter();
 	const [ProjectNameToEdit, setProjectNameToEdit] = useState<string>(
 		project.title
@@ -42,22 +41,12 @@ const Form = ({ project }: FormProps) => {
 			createdAt: null,
 		};
 
-		editProjects(projectData)
-			.then((res) => {
-				if (res.status === 200) {
-					return res.json();
-				} else {
-					return res.json().then((err) => {
-						throw new Error(err.message || "Failed to edit project");
-					});
-				}
-			})
-			.then((updatedProject) => {
-				router.push("/");
-			})
-			.catch((err) => {
-				console.error("Error:", err);
-			});
+		try {
+			await onUpdate(projectData);
+			router.push("/");
+		} catch (err) {
+			console.error("Error:", err);
+		}
 	};
 
 	return (
