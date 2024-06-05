@@ -1,6 +1,6 @@
 import React from "react";
-import { Button } from "@/app/components/button";
 import Link from "next/link";
+import { Button } from "@/app/components/button";
 
 export const Navbar = () => {
 	return (
