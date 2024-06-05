@@ -3,7 +3,10 @@ import { createContext, useContext, ReactNode } from "react";
 import { toast } from "sonner";
 
 interface ToastContextProps {
-	showToast: (message: string) => void;
+	showToast: <T>(
+		promise: Promise<T>,
+		messages: { loading: string; success: (data: T) => string; error: string }
+	) => void;
 }
 
 const ToastContext = createContext<ToastContextProps | undefined>(undefined);
@@ -11,8 +14,15 @@ const ToastContext = createContext<ToastContextProps | undefined>(undefined);
 export const ToastProvider: React.FC<{ children: ReactNode }> = ({
 	children,
 }) => {
-	const showToast = (message: string) => {
-		toast.success(message);
+	const showToast = <T,>(
+		promise: Promise<T>,
+		messages: { loading: string; success: (data: T) => string; error: string }
+	) => {
+		toast.promise(promise, {
+			loading: messages.loading,
+			success: messages.success,
+			error: messages.error,
+		});
 	};
 
 	return (

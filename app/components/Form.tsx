@@ -43,10 +43,16 @@ const Form = ({ project, onUpdate }: FormProps) => {
 			createdAt: null,
 		};
 
-		try {
-			await onUpdate(projectData);
+		const updatePromise = onUpdate(projectData);
 
-			showToast("Update successful !!!");
+		showToast(updatePromise, {
+			loading: "Updating project...",
+			success: () => "Update successful!!!",
+			error: "Error updating project",
+		});
+
+		try {
+			await updatePromise;
 			router.push("/");
 		} catch (err) {
 			console.error("Error:", err);

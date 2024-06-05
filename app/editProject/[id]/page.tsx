@@ -1,5 +1,4 @@
 "use client";
-import { useEffect, useState, Suspense } from "react";
 import Image from "next/image";
 import leftarrowIcon from "../../../public/left-arrow-icon.svg";
 import { ProjectData } from "@/app/types/ProjectData";
@@ -33,6 +32,14 @@ function EditProject({ params }: { params: { id: string } }) {
 			throw new Error("Failed to update project");
 		}
 	};
+	//Error simulation
+	const mockOnUpdate = (data: ProjectData) => {
+		return new Promise<void>((resolve, reject) => {
+			setTimeout(() => {
+				reject(new Error("Simulated error for testing purposes"));
+			}, 1000); // Simulate an async operation
+		});
+	};
 
 	if (isLoading) return <Loading />;
 	if (error) return <div>Failed to load</div>;
@@ -52,9 +59,7 @@ function EditProject({ params }: { params: { id: string } }) {
 					<h1 className="text-black text-2xl font-medium">Item Details</h1>
 				</div>
 			</div>
-			<Suspense fallback={<Loading />}>
-				{<Form project={data} onUpdate={handleUpdate} />}
-			</Suspense>
+			<Form project={data} onUpdate={handleUpdate} />
 		</div>
 	);
 }
