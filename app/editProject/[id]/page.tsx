@@ -3,7 +3,7 @@ import Image from "next/image";
 import leftarrowIcon from "../../../public/left-arrow-icon.svg";
 import { ProjectData } from "@/app/types/ProjectData";
 import Link from "next/link";
-import Form from "@/app/components/Form";
+import Form from "@/app/components/EditForm";
 import Loading from "@/app/components/Loading";
 import useSWR from "swr";
 
