@@ -1,7 +1,7 @@
-import { Navbar } from "./components/navbar/navbar";
 import React, { Suspense } from "react";
-import ProjectList from "./components/ProjectList";
-import Loading from "./components/Loading";
+import { Navbar } from "@/app/components//navbar";
+import ProjectList from "@/app/components//ProjectList";
+import Loading from "@/app/components//Loading";
 
 export default function Home() {
 	return (

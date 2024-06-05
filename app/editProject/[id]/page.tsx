@@ -1,11 +1,11 @@
 "use client";
 import Image from "next/image";
-import leftarrowIcon from "../../../public/left-arrow-icon.svg";
-import { ProjectData } from "@/app/types/ProjectData";
+import leftarrowIcon from "@/public/left-arrow-icon.svg";
 import Link from "next/link";
 import Form from "@/app/components/EditForm";
 import Loading from "@/app/components/Loading";
 import useSWR from "swr";
+import { ProjectData } from "@/app/types/ProjectData";
 
 const baseURL = "http://localhost:3001";
 const fetcher = (...args: Parameters<typeof fetch>) =>
@@ -33,13 +33,13 @@ function EditProject({ params }: { params: { id: string } }) {
 		}
 	};
 	//Error simulation
-	const mockOnUpdate = (data: ProjectData) => {
-		return new Promise<void>((resolve, reject) => {
-			setTimeout(() => {
-				reject(new Error("Simulated error for testing purposes"));
-			}, 1000); // Simulate an async operation
-		});
-	};
+	// const mockOnUpdate = (data: ProjectData) => {
+	// 	return new Promise<void>((resolve, reject) => {
+	// 		setTimeout(() => {
+	// 			reject(new Error("Simulated error for testing purposes"));
+	// 		}, 1000); // Simulate an async operation
+	// 	});
+	// };
 
 	if (isLoading) return <Loading />;
 	if (error) return <div>Failed to load</div>;

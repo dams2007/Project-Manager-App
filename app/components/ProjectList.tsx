@@ -1,10 +1,18 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { ProjectData } from "../types/ProjectData";
-import ProjectItem from "./ProjectItem";
-import { getAllProjects } from "../../lib/dataCall"; // Adjust the path as necessary
-import Loading from "./Loading";
+import ProjectItem from "@/app/components/ProjectItem";
+import Loading from "@/app/components/Loading";
+import { ProjectData } from "@/app/types/ProjectData";
 import { usePathname } from "next/navigation";
+
+const baseURL = "http://localhost:3001";
+const getAllProjects = async (): Promise<ProjectData[]> => {
+	const res = await fetch(`${baseURL}/api/projects/`, {
+		cache: "no-store",
+	});
+	const projects = await res.json();
+	return projects.data;
+};
 
 const ProjectList = () => {
 	const [projects, setProjects] = useState<ProjectData[] | null>(null);

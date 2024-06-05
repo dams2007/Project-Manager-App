@@ -1,11 +1,9 @@
 "use client";
 import React, { FormEventHandler, useState } from "react";
 import Image from "next/image";
-import chevronDown from "../../public/chevron-down-icon.svg";
+import chevronDown from "@/public/chevron-down-icon.svg";
 import { Button } from "@/app/components/button";
-import { ProjectData } from "../types/ProjectData";
-import { addProject } from "../../lib/dataCall";
-import { newProject } from "../types/newProject";
+import { newProject } from "@/app/types/newProject";
 import { useRouter } from "next/navigation";
 import { useToast } from "@/app/contexts/ToastContext";
 

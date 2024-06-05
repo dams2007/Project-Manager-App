@@ -1,10 +1,10 @@
 import React from "react";
-import databaseIcon from "../../public/database-icon.svg";
-import { Button } from "@/app/components/button";
+import databaseIcon from "@/public/database-icon.svg";
 import Image from "next/image";
 import Link from "next/link";
-import { ProjectData } from "../types/ProjectData";
-import { ConvertDate } from "@/lib/dateConverter";
+import { Button } from "@/app/components/button";
+import { ProjectData } from "@/app/types/ProjectData";
+import { ConvertDate } from "@/app/utils/dateConverter";
 
 interface ProjectItemProps {
 	project: ProjectData;

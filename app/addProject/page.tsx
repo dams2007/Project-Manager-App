@@ -1,12 +1,10 @@
 "use client";
 import React from "react";
 import Image from "next/image";
-import leftarrowIcon from "../../public/left-arrow-icon.svg";
+import leftarrowIcon from "@/public/left-arrow-icon.svg";
 import Form from "@/app/components/AddForm";
-import { useRouter } from "next/navigation";
-import { newProject } from "../types/newProject";
-import { useToast } from "@/app/contexts/ToastContext";
 import Link from "next/link";
+import { newProject } from "@/app/types/newProject";
 
 const baseURL = "http://localhost:3001";
 export default function ProjectForm() {
