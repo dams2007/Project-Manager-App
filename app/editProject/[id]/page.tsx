@@ -1,19 +1,41 @@
-import { Suspense } from "react";
+"use client";
+import { useEffect, useState, Suspense } from "react";
 import Image from "next/image";
 import leftarrowIcon from "../../../public/left-arrow-icon.svg";
-import { getProject } from "../../../lib/dataCall";
 import { ProjectData } from "@/app/types/ProjectData";
 import Link from "next/link";
 import Form from "@/app/components/Form";
 import Loading from "@/app/components/Loading";
+import useSWR from "swr";
 
-async function EditProject({ params }: { params: { id: string } }) {
+const baseURL = "http://localhost:3001";
+const fetcher = (...args: Parameters<typeof fetch>) =>
+	fetch(...args).then((res) => res.json());
+
+function EditProject({ params }: { params: { id: string } }) {
 	const id = params.id as string;
+	const request = `${baseURL}/api/projects/${id}`;
+	const { data, error, isLoading, mutate } = useSWR(request, fetcher);
 
-	const FormComponent = async () => {
-		const projectData = (await getProject(id)) as ProjectData;
-		return <Form project={projectData} />;
+	const handleUpdate = async (updatedProject: ProjectData) => {
+		const res = await fetch(`${baseURL}/api/projects/${id}`, {
+			method: "PUT",
+			headers: {
+				"Content-Type": "application/json",
+			},
+			body: JSON.stringify(updatedProject),
+		});
+
+		if (res.ok) {
+			const updatedData = await res.json();
+			mutate(updatedData, false); // Update the local data and revalidate
+		} else {
+			throw new Error("Failed to update project");
+		}
 	};
+
+	if (isLoading) return <Loading />;
+	if (error) return <div>Failed to load</div>;
 
 	return (
 		<div>
@@ -31,7 +53,7 @@ async function EditProject({ params }: { params: { id: string } }) {
 				</div>
 			</div>
 			<Suspense fallback={<Loading />}>
-				<FormComponent />
+				{<Form project={data} onUpdate={handleUpdate} />}
 			</Suspense>
 		</div>
 	);
