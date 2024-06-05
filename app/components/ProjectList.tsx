@@ -4,6 +4,7 @@ import ProjectItem from "@/app/components/ProjectItem";
 import Loading from "@/app/components/Loading";
 import { ProjectData } from "@/app/types/ProjectData";
 import { usePathname } from "next/navigation";
+import { useToast } from "@/app/contexts/ToastContext";
 
 const baseURL = "http://localhost:3001";
 const getAllProjects = async (): Promise<ProjectData[]> => {
@@ -15,12 +16,24 @@ const getAllProjects = async (): Promise<ProjectData[]> => {
 };
 
 const ProjectList = () => {
+	const { showToast } = useToast();
 	const [projects, setProjects] = useState<ProjectData[] | null>(null);
 	const pathname = usePathname(); // Get the current pathname
 
 	const fetchProjects = async () => {
-		const projectData = await getAllProjects();
-		setProjects(projectData);
+		try {
+			const projectData = await getAllProjects();
+			setProjects(projectData);
+		} catch (error) {
+			console.error("Error fetching project data:", error);
+			const rejectedPromise = Promise.reject(error);
+
+			showToast(rejectedPromise, {
+				loading: "Looking for projects...",
+				success: () => "",
+				error: "Error fetching projects",
+			});
+		}
 	};
 
 	useEffect(() => {
