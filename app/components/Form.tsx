@@ -5,6 +5,7 @@ import chevronDown from "../../public/chevron-down-icon.svg";
 import { Button } from "@/app/components/button";
 import { ProjectData } from "../types/ProjectData";
 import { useRouter } from "next/navigation";
+import { useToast } from "@/app/contexts/ToastContext";
 
 import {
 	DropdownMenu,
@@ -21,6 +22,7 @@ interface FormProps {
 
 const Form = ({ project, onUpdate }: FormProps) => {
 	const router = useRouter();
+	const { showToast } = useToast();
 	const [ProjectNameToEdit, setProjectNameToEdit] = useState<string>(
 		project.title
 	);
@@ -43,6 +45,8 @@ const Form = ({ project, onUpdate }: FormProps) => {
 
 		try {
 			await onUpdate(projectData);
+
+			showToast("Update successful !!!");
 			router.push("/");
 		} catch (err) {
 			console.error("Error:", err);
