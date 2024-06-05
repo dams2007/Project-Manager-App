@@ -5,12 +5,27 @@ import Link from "next/link";
 import { Button } from "@/app/components/button";
 import { ProjectData } from "@/app/types/ProjectData";
 import { ConvertDate } from "@/app/utils/dateConverter";
+import { ProjectStatus } from "@/app/types/ProjectStatus";
 
 interface ProjectItemProps {
 	project: ProjectData;
 }
 
+const statusDisplayMap: Record<ProjectStatus, string> = {
+	DONE: "Done",
+	IN_PROGRESS: "In Progress",
+	PENDING: "Pending",
+};
+
+const statusColorMap: Record<ProjectStatus, string> = {
+	DONE: "bg-emerald-500",
+	IN_PROGRESS: "bg-yellow-400",
+	PENDING: "bg-orange-500",
+};
+
 const ProjectItem = ({ project }: ProjectItemProps) => {
+	const statusColorClass = statusColorMap[project.status as ProjectStatus];
+	const statusDisplayText = statusDisplayMap[project.status as ProjectStatus];
 	return (
 		<tr className="bg-white border-b light:bg-gray-800 light:border-gray-700 hover:bg-gray-50 light:hover:bg-gray-600 h-14">
 			<td
@@ -25,10 +40,10 @@ const ProjectItem = ({ project }: ProjectItemProps) => {
 			<td scope="row" className="text-primary-color px-6 py-4">
 				<div className="sm:flex sm:flex-col sm:items-start">
 					<div className="mt-1 flex items-center gap-x-1.5">
-						<div className="flex-none rounded-full bg-emerald-500/20 p-1">
-							<div className="h-1.5 w-1.5 rounded-full bg-emerald-500"></div>
-						</div>
-						<p className="text-primary-color">{project.status}</p>
+						<div
+							className={`flex-none rounded-full ${statusColorClass} p-1`}
+						></div>
+						<p className="text-primary-color">{statusDisplayText}</p>
 					</div>
 				</div>
 			</td>
