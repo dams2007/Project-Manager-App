@@ -2,10 +2,10 @@ import React from "react";
 import ProjectItem from "@/app/components/ProjectItem";
 import Loading from "@/app/components/Loading";
 import EmptyState from "@/app/components/EmptyState";
-import { ProjectData } from "@/app/types/ProjectData";
+import { ProjectResponse } from "@/app/types/ProjectResponse";
 
 interface ProjectListProps {
-	projects: ProjectData[];
+	projects: ProjectResponse[];
 }
 
 const ProjectList: React.FC<ProjectListProps> = ({ projects }) => {

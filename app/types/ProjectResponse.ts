@@ -1,4 +1,4 @@
-export type ProjectData = {
+export type ProjectResponse = {
 	id: number | null;
 	title: string;
 	description: string;

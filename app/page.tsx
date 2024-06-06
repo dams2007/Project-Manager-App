@@ -1,11 +1,11 @@
 import React from "react";
-import { Navbar } from "@/app/components/navbar";
+import Navbar from "@/app/components/navbar";
 import ProjectList from "@/app/components/ProjectList";
-import { ProjectData } from "@/app/types/ProjectData";
+import { ProjectResponse } from "@/app/types/ProjectResponse";
 
 const baseURL = "http://localhost:3001";
 
-const getAllProjects = async (): Promise<ProjectData[]> => {
+const getAllProjects = async (): Promise<ProjectResponse[]> => {
 	const res = await fetch(`${baseURL}/api/projects/`, {
 		cache: "no-store",
 	});

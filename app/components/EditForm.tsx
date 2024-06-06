@@ -3,7 +3,7 @@ import React, { FormEventHandler, useState } from "react";
 import Image from "next/image";
 import chevronDown from "@/public/chevron-down-icon.svg";
 import { Button } from "@/app/components/button";
-import { ProjectData } from "@/app/types/ProjectData";
+import { ProjectResponse } from "@/app/types/ProjectResponse";
 import { useRouter } from "next/navigation";
 import { useToast } from "@/app/contexts/ToastContext";
 import { ProjectStatus } from "@/app/types/ProjectStatus";
@@ -20,13 +20,13 @@ import {
 } from "@/app/components/dropdown-menu";
 
 interface FormProps {
-	project: ProjectData;
+	project: ProjectResponse;
 	projectId: string;
 }
 
 const baseURL = "http://localhost:3001";
 
-const Form = ({ project, projectId }: FormProps) => {
+const EditForm = ({ project, projectId }: FormProps) => {
 	const router = useRouter();
 	const { showToast } = useToast();
 
@@ -48,7 +48,7 @@ const Form = ({ project, projectId }: FormProps) => {
 			ProjectStatusToEdit
 		] as ProjectStatus;
 
-		const projectData: ProjectData = {
+		const projectData: ProjectResponse = {
 			id: project.id,
 			title: ProjectNameToEdit,
 			description: ProjectDescToEdit,
@@ -173,4 +173,4 @@ const Form = ({ project, projectId }: FormProps) => {
 	);
 };
 
-export default Form;
+export default EditForm;

@@ -1,8 +1,8 @@
 import Image from "next/image";
 import leftarrowIcon from "@/public/left-arrow-icon.svg";
 import Link from "next/link";
-import Form from "@/app/components/EditForm";
-import { ProjectData } from "@/app/types/ProjectData";
+import EditForm from "@/app/components/EditForm";
+import { ProjectResponse } from "@/app/types/ProjectResponse";
 
 const baseURL = "http://localhost:3001";
 
@@ -10,7 +10,7 @@ interface PageProps {
 	params: { id: string };
 }
 
-async function fetchProject(id: string): Promise<ProjectData> {
+async function fetchProject(id: string): Promise<ProjectResponse> {
 	const res = await fetch(`${baseURL}/api/projects/${id}`, {
 		cache: "no-store",
 	});
@@ -45,7 +45,7 @@ export default async function EditProject({ params }: PageProps) {
 					<h1 className="text-black text-2xl font-medium">Item Details</h1>
 				</div>
 			</div>
-			<Form project={project} projectId={id} />
+			<EditForm project={project} projectId={id} />
 		</div>
 	);
 }
