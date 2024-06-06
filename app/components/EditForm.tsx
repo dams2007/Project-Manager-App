@@ -1,4 +1,5 @@
 "use client";
+
 import React, { FormEventHandler, useState } from "react";
 import Image from "next/image";
 import chevronDown from "@/public/chevron-down-icon.svg";
@@ -19,19 +20,25 @@ import {
 	DropdownMenuTrigger,
 } from "@/app/components/dropdown-menu";
 
-interface FormProps {
+// Define the props interface for the form component
+interface EditFormProps {
 	project: ProjectResponse;
 	projectId: string;
 }
 
+// Retrieve the base URL for the API from environment variables
 const baseURL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
-const EditForm = ({ project, projectId }: FormProps) => {
+// Define the EditForm component
+const EditForm = ({ project, projectId }: EditFormProps) => {
+	// Initialize router and toast context hooks
 	const router = useRouter();
 	const { showToast } = useToast();
 
+	// Map the project status to display text
 	const statusDisplayText = statusDisplayMap[project.status as ProjectStatus];
 
+	// Define state variables for the form inputs
 	const [ProjectNameToEdit, setProjectNameToEdit] = useState<string>(
 		project.title
 	);
@@ -41,13 +48,16 @@ const EditForm = ({ project, projectId }: FormProps) => {
 	const [ProjectStatusToEdit, setProjectStatusToEdit] =
 		useState<string>(statusDisplayText);
 
+	// Define the form submission handler
 	const handleEditProject: FormEventHandler<HTMLFormElement> = async (e) => {
 		e.preventDefault();
 
+		// Convert status to a valid format for sending the request
 		const statusConverted = reverseStatusDisplayMap[
 			ProjectStatusToEdit
 		] as ProjectStatus;
 
+		// Create the project data object
 		const projectData: ProjectResponse = {
 			id: project.id,
 			title: ProjectNameToEdit,
@@ -56,6 +66,7 @@ const EditForm = ({ project, projectId }: FormProps) => {
 			createdAt: null,
 		};
 
+		// Send a PUT request to update the project and handle the response with a toast
 		const updatePromise = fetch(`${baseURL}/api/projects/${projectId}`, {
 			method: "PUT",
 			headers: {
@@ -75,6 +86,7 @@ const EditForm = ({ project, projectId }: FormProps) => {
 			error: "Error updating project",
 		});
 
+		// Handle the response and navigate to the home page
 		try {
 			await updatePromise;
 			router.push("/");
@@ -84,8 +96,10 @@ const EditForm = ({ project, projectId }: FormProps) => {
 		}
 	};
 
+	// Return the form JSX
 	return (
 		<form onSubmit={handleEditProject} className="max-w-sm ml-12">
+			{/* Project Name Input */}
 			<div className="mb-5">
 				<label
 					htmlFor="project_name"
@@ -103,6 +117,8 @@ const EditForm = ({ project, projectId }: FormProps) => {
 					required
 				/>
 			</div>
+
+			{/* Project Description Input */}
 			<div className="mb-5">
 				<label
 					htmlFor="description"
@@ -118,6 +134,8 @@ const EditForm = ({ project, projectId }: FormProps) => {
 					required
 				/>
 			</div>
+
+			{/* Project Status Input */}
 			<div className="mb-5">
 				<label
 					htmlFor="status"
@@ -163,6 +181,8 @@ const EditForm = ({ project, projectId }: FormProps) => {
 					</DropdownMenuContent>
 				</DropdownMenu>
 			</div>
+
+			{/* Submit Button */}
 			<Button
 				type="submit"
 				className="self-center mr-12 rounded-md bg-secondary-color px-3.5 py-2.5 text-sm font-normal text-white shadow-sm hover:bg-blue-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-800"
@@ -173,4 +193,5 @@ const EditForm = ({ project, projectId }: FormProps) => {
 	);
 };
 
+// Export the EditForm component
 export default EditForm;

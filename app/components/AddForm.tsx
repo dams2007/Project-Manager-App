@@ -1,4 +1,5 @@
 "use client";
+
 import React, { FormEventHandler, useState } from "react";
 import Image from "next/image";
 import chevronDown from "@/public/chevron-down-icon.svg";
@@ -8,7 +9,6 @@ import { useRouter } from "next/navigation";
 import { useToast } from "@/app/contexts/ToastContext";
 import { ProjectStatus } from "@/app/types/ProjectStatus";
 import { reverseStatusDisplayMap } from "@/app/constants/statusMap";
-
 import {
 	DropdownMenu,
 	DropdownMenuContent,
@@ -17,39 +17,49 @@ import {
 	DropdownMenuTrigger,
 } from "@/app/components/dropdown-menu";
 
-interface FormProps {
+// Define the props interface for the form component
+interface AddFormProps {
 	onUpdate: (updatedProject: CreateProjectInput) => Promise<void>;
 }
 
-const AddForm = ({ onUpdate }: FormProps) => {
+// Define the AddForm component
+const AddForm = ({ onUpdate }: AddFormProps) => {
+	// Initialize router and toast context hooks
 	const router = useRouter();
 	const { showToast } = useToast();
+
+	// Define state variables for the form inputs
 	const [newProjectName, setNewProjectName] = useState<string>("");
 	const [newProjectDesc, setNewProjectDesc] = useState<string>("");
 	const [newProjectStatus, setNewProjectStatus] = useState<string>("");
 
+	// Define the form submission handler
 	const handleSubmitNewProject: FormEventHandler<HTMLFormElement> = async (
 		e
 	) => {
 		e.preventDefault();
 
+		// Convert status to a valid format for sending the request
 		const statusConverted = reverseStatusDisplayMap[
 			newProjectStatus
 		] as ProjectStatus;
 
+		// Create the project data object
 		const projectData: CreateProjectInput = {
 			title: newProjectName,
 			description: newProjectDesc,
 			status: statusConverted,
 		};
 
+		// Call the onUpdate function and handle the response with a toast
 		const updatePromise = onUpdate(projectData);
-
 		showToast(updatePromise, {
 			loading: "Creating project...",
 			success: () => "Project created!!!",
-			error: "Error creating project",
+			error: "Failed to create project",
 		});
+
+		// Handle the response and navigate to the home page
 		try {
 			await updatePromise;
 			router.push("/");
@@ -62,6 +72,7 @@ const AddForm = ({ onUpdate }: FormProps) => {
 
 	return (
 		<form onSubmit={handleSubmitNewProject} className="max-w-sm ml-12">
+			{/* Project Name Input */}
 			<div className="mb-5">
 				<label
 					htmlFor="project_name"
@@ -78,6 +89,8 @@ const AddForm = ({ onUpdate }: FormProps) => {
 					required
 				/>
 			</div>
+
+			{/* Project Description Input */}
 			<div className="mb-5">
 				<label
 					htmlFor="description"
@@ -94,6 +107,8 @@ const AddForm = ({ onUpdate }: FormProps) => {
 					required
 				/>
 			</div>
+
+			{/* Project Status Input */}
 			<div className="mb-5">
 				<label
 					htmlFor="status"
@@ -101,13 +116,9 @@ const AddForm = ({ onUpdate }: FormProps) => {
 				>
 					Status
 				</label>
-
 				<DropdownMenu>
 					<DropdownMenuTrigger asChild>
-						<Button
-							variant="outline"
-							className=" border-gray-300 text-gray-600"
-						>
+						<Button variant="outline" className="border-gray-300 text-gray-600">
 							{newProjectStatus}
 							<Image
 								className="ml-3"
@@ -143,6 +154,7 @@ const AddForm = ({ onUpdate }: FormProps) => {
 					</DropdownMenuContent>
 				</DropdownMenu>
 			</div>
+
 			<Button
 				type="submit"
 				className="self-center mr-12 rounded-md bg-secondary-color px-3.5 py-2.5 text-sm font-normal text-white shadow-sm hover:bg-blue-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-800"
