@@ -53,6 +53,7 @@ const Form = ({ onUpdate }: FormProps) => {
 		try {
 			await updatePromise;
 			router.push("/");
+			router.refresh();
 		} catch (err) {
 			console.error("Error:", err);
 		}
