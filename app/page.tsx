@@ -3,7 +3,7 @@ import Navbar from "@/app/components/navbar";
 import ProjectList from "@/app/components/ProjectList";
 import { ProjectResponse } from "@/app/types/ProjectResponse";
 
-const baseURL = "http://localhost:3001";
+const baseURL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
 const getAllProjects = async (): Promise<ProjectResponse[]> => {
 	const res = await fetch(`${baseURL}/api/projects/`, {

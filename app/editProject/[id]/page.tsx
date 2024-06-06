@@ -4,7 +4,7 @@ import Link from "next/link";
 import EditForm from "@/app/components/EditForm";
 import { ProjectResponse } from "@/app/types/ProjectResponse";
 
-const baseURL = "http://localhost:3001";
+const baseURL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
 interface PageProps {
 	params: { id: string };

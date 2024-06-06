@@ -24,7 +24,7 @@ interface FormProps {
 	projectId: string;
 }
 
-const baseURL = "http://localhost:3001";
+const baseURL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
 const EditForm = ({ project, projectId }: FormProps) => {
 	const router = useRouter();

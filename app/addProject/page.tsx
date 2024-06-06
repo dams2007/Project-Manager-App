@@ -6,7 +6,7 @@ import AddForm from "@/app/components/AddForm";
 import Link from "next/link";
 import { CreateProjectInput } from "@/app/types/CreateProjectInput";
 
-const baseURL = "http://localhost:3001";
+const baseURL = process.env.NEXT_PUBLIC_API_BASE_URL;
 export default function ProjectForm() {
 	const handleUpdate = async (updatedProject: CreateProjectInput) => {
 		const res = await fetch(`${baseURL}/api/projects`, {
