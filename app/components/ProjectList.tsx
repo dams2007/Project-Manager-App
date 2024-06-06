@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from "react";
 import ProjectItem from "@/app/components/ProjectItem";
 import Loading from "@/app/components/Loading";
+import EmptyState from "@/app/components/EmptyState";
 import { ProjectData } from "@/app/types/ProjectData";
 import { usePathname } from "next/navigation";
 import { useToast } from "@/app/contexts/ToastContext";
@@ -42,6 +43,10 @@ const ProjectList = () => {
 
 	if (!projects) {
 		return <Loading />;
+	}
+
+	if (projects.length === 0) {
+		return <EmptyState />;
 	}
 
 	return (
