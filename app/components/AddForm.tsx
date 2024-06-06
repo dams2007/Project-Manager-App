@@ -6,6 +6,8 @@ import { Button } from "@/app/components/button";
 import { newProject } from "@/app/types/newProject";
 import { useRouter } from "next/navigation";
 import { useToast } from "@/app/contexts/ToastContext";
+import { ProjectStatus } from "@/app/types/ProjectStatus";
+import { reverseStatusDisplayMap } from "@/app/constants/statusMap";
 
 import {
 	DropdownMenu,
@@ -31,10 +33,14 @@ const Form = ({ onUpdate }: FormProps) => {
 	) => {
 		e.preventDefault();
 
+		const statusConverted = reverseStatusDisplayMap[
+			newProjectStatus
+		] as ProjectStatus;
+
 		const projectData: newProject = {
 			title: newProjectName,
 			description: newProjectDesc,
-			status: newProjectStatus,
+			status: statusConverted,
 		};
 
 		const updatePromise = onUpdate(projectData);
@@ -67,7 +73,7 @@ const Form = ({ onUpdate }: FormProps) => {
 					onChange={(e) => setNewProjectName(e.target.value)}
 					type="text"
 					className="bg-gray-50 border border-gray-300 text-gray-600 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-					placeholder="Project name"
+					placeholder="Give your project a name"
 					required
 				/>
 			</div>
@@ -83,6 +89,7 @@ const Form = ({ onUpdate }: FormProps) => {
 					onChange={(e) => setNewProjectDesc(e.target.value)}
 					type="text"
 					className="bg-gray-50 border border-gray-300 text-gray-600 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+					placeholder="Summarize your project"
 					required
 				/>
 			</div>
@@ -113,21 +120,31 @@ const Form = ({ onUpdate }: FormProps) => {
 							value={newProjectStatus}
 							onValueChange={setNewProjectStatus}
 						>
-							<DropdownMenuRadioItem value="DONE">Done</DropdownMenuRadioItem>
-							<DropdownMenuRadioItem value="PENDING">
-								Pending
+							<DropdownMenuRadioItem value="Done">
+								<div className="mt-1 flex items-center gap-x-1.5">
+									<div className="flex-none rounded-full bg-emerald-500 p-1"></div>
+									<p className="text-primary-color">Done</p>
+								</div>
 							</DropdownMenuRadioItem>
-							<DropdownMenuRadioItem value="IN_PROGRESS">
-								In Progress
+							<DropdownMenuRadioItem value="Pending">
+								<div className="mt-1 flex items-center gap-x-1.5">
+									<div className="flex-none rounded-full bg-orange-500 p-1"></div>
+									<p className="text-primary-color">Pending</p>
+								</div>
+							</DropdownMenuRadioItem>
+							<DropdownMenuRadioItem value="In Progress">
+								<div className="mt-1 flex items-center gap-x-1.5">
+									<div className="flex-none rounded-full bg-yellow-400 p-1"></div>
+									<p className="text-primary-color">In Progress</p>
+								</div>
 							</DropdownMenuRadioItem>
 						</DropdownMenuRadioGroup>
 					</DropdownMenuContent>
 				</DropdownMenu>
 			</div>
-
 			<Button
 				type="submit"
-				className="self-center mr-12 rounded-md bg-secondary-color px-3.5 py-2.5 text-sm font-normal text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+				className="self-center mr-12 rounded-md bg-secondary-color px-3.5 py-2.5 text-sm font-normal text-white shadow-sm hover:bg-blue-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-800"
 			>
 				Save
 			</Button>

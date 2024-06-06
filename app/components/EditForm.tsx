@@ -6,6 +6,11 @@ import { Button } from "@/app/components/button";
 import { ProjectData } from "@/app/types/ProjectData";
 import { useRouter } from "next/navigation";
 import { useToast } from "@/app/contexts/ToastContext";
+import { ProjectStatus } from "@/app/types/ProjectStatus";
+import {
+	statusDisplayMap,
+	reverseStatusDisplayMap,
+} from "@/app/constants/statusMap";
 
 import {
 	DropdownMenu,
@@ -23,23 +28,30 @@ interface FormProps {
 const Form = ({ project, onUpdate }: FormProps) => {
 	const router = useRouter();
 	const { showToast } = useToast();
+
+	const statusDisplayText = statusDisplayMap[project.status as ProjectStatus];
+
 	const [ProjectNameToEdit, setProjectNameToEdit] = useState<string>(
 		project.title
 	);
 	const [ProjectDescToEdit, setProjectDescToEdit] = useState<string>(
 		project.description
 	);
-	const [ProjectStatusToEdit, setProjectStatusToEdit] = useState<string>(
-		project.status
-	);
+	const [ProjectStatusToEdit, setProjectStatusToEdit] =
+		useState<string>(statusDisplayText);
 
 	const handleEditProject: FormEventHandler<HTMLFormElement> = async (e) => {
 		e.preventDefault();
+
+		const statusConverted = reverseStatusDisplayMap[
+			ProjectStatusToEdit
+		] as ProjectStatus;
+
 		const projectData: ProjectData = {
 			id: project.id,
 			title: ProjectNameToEdit,
 			description: ProjectDescToEdit,
-			status: ProjectStatusToEdit,
+			status: statusConverted,
 			createdAt: null,
 		};
 
@@ -113,15 +125,26 @@ const Form = ({ project, onUpdate }: FormProps) => {
 					</DropdownMenuTrigger>
 					<DropdownMenuContent className="w-56" side="right" align="start">
 						<DropdownMenuRadioGroup
-							value={ProjectStatusToEdit}
+							value={statusDisplayText}
 							onValueChange={setProjectStatusToEdit}
 						>
-							<DropdownMenuRadioItem value="DONE">Done</DropdownMenuRadioItem>
-							<DropdownMenuRadioItem value="PENDING">
-								Pending
+							<DropdownMenuRadioItem value="Done">
+								<div className="mt-1 flex items-center gap-x-1.5">
+									<div className="flex-none rounded-full bg-emerald-500 p-1"></div>
+									<p className="text-primary-color">Done</p>
+								</div>
 							</DropdownMenuRadioItem>
-							<DropdownMenuRadioItem value="IN_PROGRESS">
-								In Progress
+							<DropdownMenuRadioItem value="Pending">
+								<div className="mt-1 flex items-center gap-x-1.5">
+									<div className="flex-none rounded-full bg-orange-500 p-1"></div>
+									<p className="text-primary-color">Pending</p>
+								</div>
+							</DropdownMenuRadioItem>
+							<DropdownMenuRadioItem value="In Progress">
+								<div className="mt-1 flex items-center gap-x-1.5">
+									<div className="flex-none rounded-full bg-yellow-400 p-1"></div>
+									<p className="text-primary-color">In Progress</p>
+								</div>
 							</DropdownMenuRadioItem>
 						</DropdownMenuRadioGroup>
 					</DropdownMenuContent>
@@ -129,7 +152,7 @@ const Form = ({ project, onUpdate }: FormProps) => {
 			</div>
 			<Button
 				type="submit"
-				className="self-center mr-12 rounded-md bg-secondary-color px-3.5 py-2.5 text-sm font-normal text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+				className="self-center mr-12 rounded-md bg-secondary-color px-3.5 py-2.5 text-sm font-normal text-white shadow-sm hover:bg-blue-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-800"
 			>
 				SAVE
 			</Button>
