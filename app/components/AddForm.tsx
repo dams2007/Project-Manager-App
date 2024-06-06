@@ -6,6 +6,8 @@ import { Button } from "@/app/components/button";
 import { newProject } from "@/app/types/newProject";
 import { useRouter } from "next/navigation";
 import { useToast } from "@/app/contexts/ToastContext";
+import { ProjectStatus } from "@/app/types/ProjectStatus";
+import { reverseStatusDisplayMap } from "@/app/constants/statusMap";
 
 import {
 	DropdownMenu,
@@ -31,10 +33,14 @@ const Form = ({ onUpdate }: FormProps) => {
 	) => {
 		e.preventDefault();
 
+		const statusConverted = reverseStatusDisplayMap[
+			newProjectStatus
+		] as ProjectStatus;
+
 		const projectData: newProject = {
 			title: newProjectName,
 			description: newProjectDesc,
-			status: newProjectStatus,
+			status: statusConverted,
 		};
 
 		const updatePromise = onUpdate(projectData);
@@ -114,19 +120,19 @@ const Form = ({ onUpdate }: FormProps) => {
 							value={newProjectStatus}
 							onValueChange={setNewProjectStatus}
 						>
-							<DropdownMenuRadioItem value="DONE">
+							<DropdownMenuRadioItem value="Done">
 								<div className="mt-1 flex items-center gap-x-1.5">
 									<div className="flex-none rounded-full bg-emerald-500 p-1"></div>
 									<p className="text-primary-color">Done</p>
 								</div>
 							</DropdownMenuRadioItem>
-							<DropdownMenuRadioItem value="PENDING">
+							<DropdownMenuRadioItem value="Pending">
 								<div className="mt-1 flex items-center gap-x-1.5">
 									<div className="flex-none rounded-full bg-orange-500 p-1"></div>
 									<p className="text-primary-color">Pending</p>
 								</div>
 							</DropdownMenuRadioItem>
-							<DropdownMenuRadioItem value="IN_PROGRESS">
+							<DropdownMenuRadioItem value="In Progress">
 								<div className="mt-1 flex items-center gap-x-1.5">
 									<div className="flex-none rounded-full bg-yellow-400 p-1"></div>
 									<p className="text-primary-color">In Progress</p>

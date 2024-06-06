@@ -6,22 +6,11 @@ import { Button } from "@/app/components/button";
 import { ProjectData } from "@/app/types/ProjectData";
 import { ConvertDate } from "@/app/utils/dateConverter";
 import { ProjectStatus } from "@/app/types/ProjectStatus";
+import { statusDisplayMap, statusColorMap } from "@/app/constants/statusMap";
 
 interface ProjectItemProps {
 	project: ProjectData;
 }
-
-const statusDisplayMap: Record<ProjectStatus, string> = {
-	DONE: "Done",
-	IN_PROGRESS: "In Progress",
-	PENDING: "Pending",
-};
-
-const statusColorMap: Record<ProjectStatus, string> = {
-	DONE: "bg-emerald-500",
-	IN_PROGRESS: "bg-yellow-400",
-	PENDING: "bg-orange-500",
-};
 
 const ProjectItem = ({ project }: ProjectItemProps) => {
 	const statusColorClass = statusColorMap[project.status as ProjectStatus];
