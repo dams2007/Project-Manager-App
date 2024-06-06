@@ -40,7 +40,7 @@ const ProjectItem = ({ project }: ProjectItemProps) => {
 				{ConvertDate(project.createdAt as string)}
 			</td>
 			<td className="text-primary-color rounded-r-lg px-6 py-4">
-				<Button className="self-center mr-12 rounded-md bg-secondary-color px-3.5 py-2.5 text-sm font-normal text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
+				<Button className="self-center mr-12 rounded-md bg-secondary-color px-3.5 py-2.5 text-sm font-normal text-white shadow-sm hover:bg-blue-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-800">
 					<Link href={`/editProject/${project.id}`}>Edit</Link>
 				</Button>
 			</td>
