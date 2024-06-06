@@ -48,7 +48,7 @@ const AddForm = ({ onUpdate }: FormProps) => {
 		showToast(updatePromise, {
 			loading: "Creating project...",
 			success: () => "Project created!!!",
-			error: "Error creating project",
+			error: "Failed to create project",
 		});
 		try {
 			await updatePromise;

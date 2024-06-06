@@ -3,6 +3,9 @@ import leftarrowIcon from "@/public/left-arrow-icon.svg";
 import Link from "next/link";
 import EditForm from "@/app/components/EditForm";
 import { ProjectResponse } from "@/app/types/ProjectResponse";
+import { Suspense } from "react";
+import Loading from "@/app/components/Loading";
+import ErrorState from "@/app/components/ErrorState";
 
 const baseURL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
@@ -22,12 +25,12 @@ async function fetchProject(id: string): Promise<ProjectResponse> {
 
 export default async function EditProject({ params }: PageProps) {
 	const id = params.id;
-	let project;
+	let project: ProjectResponse;
 
 	try {
 		project = await fetchProject(id);
 	} catch (error) {
-		return <div>Failed to load</div>;
+		return <ErrorState errorMessage={"Failed to fetch project"} />;
 	}
 
 	return (
@@ -45,7 +48,9 @@ export default async function EditProject({ params }: PageProps) {
 					<h1 className="text-black text-2xl font-medium">Item Details</h1>
 				</div>
 			</div>
-			<EditForm project={project} projectId={id} />
+			<Suspense fallback={<Loading />}>
+				<EditForm project={project} projectId={id} />
+			</Suspense>
 		</div>
 	);
 }

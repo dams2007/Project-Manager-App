@@ -20,7 +20,7 @@ export default function ProjectForm() {
 		if (res.ok) {
 			const updatedData = await res.json();
 		} else {
-			throw new Error("Failed to update project");
+			throw new Error("Failed to create project");
 		}
 	};
 
