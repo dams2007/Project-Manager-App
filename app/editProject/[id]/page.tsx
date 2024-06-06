@@ -1,5 +1,3 @@
-// src/app/edit/[id]/page.tsx
-
 import Image from "next/image";
 import leftarrowIcon from "@/public/left-arrow-icon.svg";
 import Link from "next/link";
