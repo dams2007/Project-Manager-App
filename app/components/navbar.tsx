@@ -2,7 +2,7 @@ import React from "react";
 import Link from "next/link";
 import { Button } from "@/app/components/button";
 
-export const Navbar = () => {
+const Navbar = () => {
 	return (
 		<div
 			className="h-20 bg-white flex space-evenly items-center"
@@ -21,3 +21,4 @@ export const Navbar = () => {
 		</div>
 	);
 };
+export default Navbar;

@@ -2,13 +2,13 @@
 import React from "react";
 import Image from "next/image";
 import leftarrowIcon from "@/public/left-arrow-icon.svg";
-import Form from "@/app/components/AddForm";
+import AddForm from "@/app/components/AddForm";
 import Link from "next/link";
-import { newProject } from "@/app/types/newProject";
+import { CreateProjectInput } from "@/app/types/CreateProjectInput";
 
-const baseURL = "http://localhost:3001";
+const baseURL = process.env.NEXT_PUBLIC_API_BASE_URL;
 export default function ProjectForm() {
-	const handleUpdate = async (updatedProject: newProject) => {
+	const handleUpdate = async (updatedProject: CreateProjectInput) => {
 		const res = await fetch(`${baseURL}/api/projects`, {
 			method: "POST",
 			headers: {
@@ -39,7 +39,7 @@ export default function ProjectForm() {
 					<h1 className="text-black text-2xl font-medium">Item Details</h1>
 				</div>
 			</div>
-			<Form onUpdate={handleUpdate} />
+			<AddForm onUpdate={handleUpdate} />
 		</div>
 	);
 }

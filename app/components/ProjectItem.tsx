@@ -2,13 +2,13 @@ import React from "react";
 import databaseIcon from "@/public/database-icon.svg";
 import Image from "next/image";
 import Link from "next/link";
-import { ProjectData } from "@/app/types/ProjectData";
+import { ProjectResponse } from "@/app/types/ProjectResponse";
 import { ConvertDate } from "@/app/utils/dateConverter";
 import { ProjectStatus } from "@/app/types/ProjectStatus";
 import { statusDisplayMap, statusColorMap } from "@/app/constants/statusMap";
 
 interface ProjectItemProps {
-	project: ProjectData;
+	project: ProjectResponse;
 }
 
 const ProjectItem = ({ project }: ProjectItemProps) => {

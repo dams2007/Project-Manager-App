@@ -1,48 +1,34 @@
-"use client";
 import Image from "next/image";
 import leftarrowIcon from "@/public/left-arrow-icon.svg";
 import Link from "next/link";
-import Form from "@/app/components/EditForm";
-import Loading from "@/app/components/Loading";
-import useSWR from "swr";
-import { ProjectData } from "@/app/types/ProjectData";
+import EditForm from "@/app/components/EditForm";
+import { ProjectResponse } from "@/app/types/ProjectResponse";
 
-const baseURL = "http://localhost:3001";
-const fetcher = (...args: Parameters<typeof fetch>) =>
-	fetch(...args).then((res) => res.json());
+const baseURL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
-function EditProject({ params }: { params: { id: string } }) {
-	const id = params.id as string;
-	const request = `${baseURL}/api/projects/${id}`;
-	const { data, error, isLoading, mutate } = useSWR(request, fetcher);
+interface PageProps {
+	params: { id: string };
+}
 
-	const handleUpdate = async (updatedProject: ProjectData) => {
-		const res = await fetch(`${baseURL}/api/projects/${id}`, {
-			method: "PUT",
-			headers: {
-				"Content-Type": "application/json",
-			},
-			body: JSON.stringify(updatedProject),
-		});
+async function fetchProject(id: string): Promise<ProjectResponse> {
+	const res = await fetch(`${baseURL}/api/projects/${id}`, {
+		cache: "no-store",
+	});
+	if (!res.ok) {
+		throw new Error("Failed to fetch project");
+	}
+	return res.json();
+}
 
-		if (res.ok) {
-			const updatedData = await res.json();
-			mutate(updatedData, false); // Update the local data and revalidate
-		} else {
-			throw new Error("Failed to update project");
-		}
-	};
-	//Error simulation
-	// const mockOnUpdate = (data: ProjectData) => {
-	// 	return new Promise<void>((resolve, reject) => {
-	// 		setTimeout(() => {
-	// 			reject(new Error("Simulated error for testing purposes"));
-	// 		}, 1000); // Simulate an async operation
-	// 	});
-	// };
+export default async function EditProject({ params }: PageProps) {
+	const id = params.id;
+	let project;
 
-	if (isLoading) return <Loading />;
-	if (error) return <div>Failed to load</div>;
+	try {
+		project = await fetchProject(id);
+	} catch (error) {
+		return <div>Failed to load</div>;
+	}
 
 	return (
 		<div>
@@ -59,9 +45,7 @@ function EditProject({ params }: { params: { id: string } }) {
 					<h1 className="text-black text-2xl font-medium">Item Details</h1>
 				</div>
 			</div>
-			<Form project={data} onUpdate={handleUpdate} />
+			<EditForm project={project} projectId={id} />
 		</div>
 	);
 }
-
-export default EditProject;

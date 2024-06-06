@@ -1,47 +1,20 @@
-"use client";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import ProjectItem from "@/app/components/ProjectItem";
 import Loading from "@/app/components/Loading";
-import { ProjectData } from "@/app/types/ProjectData";
-import { usePathname } from "next/navigation";
-import { useToast } from "@/app/contexts/ToastContext";
+import EmptyState from "@/app/components/EmptyState";
+import { ProjectResponse } from "@/app/types/ProjectResponse";
 
-const baseURL = "http://localhost:3001";
-const getAllProjects = async (): Promise<ProjectData[]> => {
-	const res = await fetch(`${baseURL}/api/projects/`, {
-		cache: "no-store",
-	});
-	const projects = await res.json();
-	return projects.data;
-};
+interface ProjectListProps {
+	projects: ProjectResponse[];
+}
 
-const ProjectList = () => {
-	const { showToast } = useToast();
-	const [projects, setProjects] = useState<ProjectData[] | null>(null);
-	const pathname = usePathname(); // Get the current pathname
-
-	const fetchProjects = async () => {
-		try {
-			const projectData = await getAllProjects();
-			setProjects(projectData);
-		} catch (error) {
-			console.error("Error fetching project data:", error);
-			const rejectedPromise = Promise.reject(error);
-
-			showToast(rejectedPromise, {
-				loading: "Looking for projects...",
-				success: () => "",
-				error: "Error fetching projects",
-			});
-		}
-	};
-
-	useEffect(() => {
-		fetchProjects(); // Re-fetch when pathname changes
-	}, [pathname]);
-
+const ProjectList: React.FC<ProjectListProps> = ({ projects }) => {
 	if (!projects) {
 		return <Loading />;
+	}
+
+	if (projects.length === 0) {
+		return <EmptyState />;
 	}
 
 	return (

@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-const baseURL = "http://localhost:3000";
+const baseURL = process.env.SERVER_BASE_URL;
 
 export async function GET() {
 	try {

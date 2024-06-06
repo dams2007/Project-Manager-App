@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { NextApiRequest } from "next";
 
-const baseURL = "http://localhost:3000";
+const baseURL = process.env.SERVER_BASE_URL;
 
 export const GET = async (
 	request: NextApiRequest,

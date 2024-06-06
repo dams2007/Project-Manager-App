@@ -3,7 +3,7 @@ import React, { FormEventHandler, useState } from "react";
 import Image from "next/image";
 import chevronDown from "@/public/chevron-down-icon.svg";
 import { Button } from "@/app/components/button";
-import { newProject } from "@/app/types/newProject";
+import { CreateProjectInput } from "@/app/types/CreateProjectInput";
 import { useRouter } from "next/navigation";
 import { useToast } from "@/app/contexts/ToastContext";
 import { ProjectStatus } from "@/app/types/ProjectStatus";
@@ -18,10 +18,10 @@ import {
 } from "@/app/components/dropdown-menu";
 
 interface FormProps {
-	onUpdate: (updatedProject: newProject) => Promise<void>;
+	onUpdate: (updatedProject: CreateProjectInput) => Promise<void>;
 }
 
-const Form = ({ onUpdate }: FormProps) => {
+const AddForm = ({ onUpdate }: FormProps) => {
 	const router = useRouter();
 	const { showToast } = useToast();
 	const [newProjectName, setNewProjectName] = useState<string>("");
@@ -37,7 +37,7 @@ const Form = ({ onUpdate }: FormProps) => {
 			newProjectStatus
 		] as ProjectStatus;
 
-		const projectData: newProject = {
+		const projectData: CreateProjectInput = {
 			title: newProjectName,
 			description: newProjectDesc,
 			status: statusConverted,
@@ -53,6 +53,7 @@ const Form = ({ onUpdate }: FormProps) => {
 		try {
 			await updatePromise;
 			router.push("/");
+			router.refresh();
 		} catch (err) {
 			console.error("Error:", err);
 		}
@@ -152,4 +153,4 @@ const Form = ({ onUpdate }: FormProps) => {
 	);
 };
 
-export default Form;
+export default AddForm;
