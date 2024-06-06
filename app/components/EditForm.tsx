@@ -1,4 +1,5 @@
 "use client";
+
 import React, { FormEventHandler, useState } from "react";
 import Image from "next/image";
 import chevronDown from "@/public/chevron-down-icon.svg";
@@ -11,7 +12,6 @@ import {
 	statusDisplayMap,
 	reverseStatusDisplayMap,
 } from "@/app/constants/statusMap";
-
 import {
 	DropdownMenu,
 	DropdownMenuContent,
@@ -22,10 +22,12 @@ import {
 
 interface FormProps {
 	project: ProjectData;
-	onUpdate: (updatedProject: ProjectData) => Promise<void>;
+	projectId: string;
 }
 
-const Form = ({ project, onUpdate }: FormProps) => {
+const baseURL = "http://localhost:3001";
+
+const Form = ({ project, projectId }: FormProps) => {
 	const router = useRouter();
 	const { showToast } = useToast();
 
@@ -55,7 +57,18 @@ const Form = ({ project, onUpdate }: FormProps) => {
 			createdAt: null,
 		};
 
-		const updatePromise = onUpdate(projectData);
+		const updatePromise = fetch(`${baseURL}/api/projects/${projectId}`, {
+			method: "PUT",
+			headers: {
+				"Content-Type": "application/json",
+			},
+			body: JSON.stringify(projectData),
+		}).then((res) => {
+			if (!res.ok) {
+				throw new Error("Failed to update project");
+			}
+			return res.json();
+		});
 
 		showToast(updatePromise, {
 			loading: "Updating project...",
@@ -66,6 +79,7 @@ const Form = ({ project, onUpdate }: FormProps) => {
 		try {
 			await updatePromise;
 			router.push("/");
+			router.refresh();
 		} catch (err) {
 			console.error("Error:", err);
 		}
