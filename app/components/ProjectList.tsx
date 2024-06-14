@@ -23,15 +23,15 @@ const ProjectList: React.FC<ProjectListProps> = ({ projects }) => {
 
 	// Return the component JSX
 	return (
-		<div className="w-full relative overflow-x-auto">
+		<div className="w-full relative">
 			<div className="mx-12 mt-6 mb-1">
 				{/* Header for the project list */}
-				<ul className="w-full text-sm text-left rtl:text-right border-spacing-y-2 border-separate list-none">
+				<ul className="w-full text-sm text-left rtl:text-right border-spacing-y-2 list-none">
 					<li className="text-primary-color h-8 flex items-center justify-between">
-						<div className="px-6 text-sm font-normal w-1/3">Title</div>
-						<div className="flex items-center justify-end w-1/2 gap-6 ">
-							<div className="px-6 text-sm font-normal w-1/3">Status</div>
-							<div className="px-6 text-sm font-normal w-1/3">Date Created</div>
+						<div className="px-6 text-sm font-normal ">Title</div>
+						<div className="flex items-center  gap-5">
+							<div className="px-6 text-sm font-normal w-40">Status</div>
+							<div className="px-6 text-sm font-normal w-44">Date Created</div>
 						</div>
 					</li>
 					{/* Render a ProjectItem for each project in the projects array */}
