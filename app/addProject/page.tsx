@@ -6,24 +6,22 @@ import leftarrowIcon from "@/public/left-arrow-icon.svg";
 import AddForm from "@/app/components/AddForm";
 import Link from "next/link";
 import { CreateProjectInput } from "@/app/types/CreateProjectInput";
+import { postProject } from "../action";
 
 const baseURL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
 export default function ProjectForm() {
-	// Function to handle the creation of a new project
-	const handleUpdate = async (updatedProject: CreateProjectInput) => {
-		// Send a POST request to create a new project
-		const res = await fetch(`${baseURL}/api/projects`, {
-			method: "POST",
-			headers: {
-				"Content-Type": "application/json",
-			},
-			body: JSON.stringify(updatedProject),
-		});
-
-		// Check if the response is not OK and handle accordingly
-		if (!res.ok) {
-			throw new Error("Failed to create project");
+	const handleUpdate = async (
+		updatedProject: CreateProjectInput
+	): Promise<void> => {
+		try {
+			await postProject(updatedProject);
+		} catch (error: unknown) {
+			let errorMessage = "Something went wrong";
+			if (error instanceof Error) {
+				errorMessage = error.message;
+				throw errorMessage;
+			}
 		}
 	};
 
