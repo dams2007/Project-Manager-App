@@ -26,14 +26,14 @@ const ProjectItem = ({ project }: ProjectItemProps) => {
 				className="bg-white border-b light:bg-gray-800 light:border-gray-700 hover:bg-gray-50 light:hover:bg-gray-600 h-20 flex items-center m-3 rounded-lg justify-between"
 			>
 				{/* Project title and icon */}
-				<div className="px-6 py-4 font-medium text-primary-color whitespace-nowrap light:text-white flex items-center gap-3 w-1/3">
+				<div className="px-6 py-4 font-medium text-primary-color whitespace-nowrap light:text-white flex items-center gap-3">
 					<Image priority src={databaseIcon} alt="Database Icon" />
 					{project.title}
 				</div>
 
 				{/* Project status and creation date */}
-				<div className="flex items-center justify-end w-1/2 gap-6">
-					<div className="text-primary-color px-6 py-4 w-1/3">
+				<div className="flex items-center  gap-5 ">
+					<div className="text-primary-color px-6 py-4 w-40">
 						<div className="sm:flex sm:flex-col sm:items-start">
 							<div className="flex items-center gap-x-1.5">
 								<div
@@ -43,7 +43,7 @@ const ProjectItem = ({ project }: ProjectItemProps) => {
 							</div>
 						</div>
 					</div>
-					<div className="text-primary-color px-6 py-4 w-1/3">
+					<div className="text-primary-color px-6 py-4 w-44">
 						{ConvertDate(project.createdAt as string)}
 					</div>
 				</div>
