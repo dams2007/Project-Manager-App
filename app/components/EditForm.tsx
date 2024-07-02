@@ -8,6 +8,7 @@ import { ProjectResponse } from "@/app/types/ProjectResponse";
 import { useRouter } from "next/navigation";
 import { useToast } from "@/app/contexts/ToastContext";
 import { ProjectStatus } from "@/app/types/ProjectStatus";
+import { updateProject } from "../action";
 import {
 	statusDisplayMap,
 	reverseStatusDisplayMap,
@@ -57,6 +58,11 @@ const EditForm = ({ project, projectId }: EditFormProps) => {
 			ProjectStatusToEdit
 		] as ProjectStatus;
 
+		if (!project.id) {
+			console.error("Project ID is required");
+			return;
+		}
+
 		// Create the project data object
 		const projectData: ProjectResponse = {
 			id: project.id,
@@ -66,19 +72,12 @@ const EditForm = ({ project, projectId }: EditFormProps) => {
 			createdAt: null,
 		};
 
-		// Send a PUT request to update the project and handle the response with a toast
-		const updatePromise = fetch(`${baseURL}/api/projects/${projectId}`, {
-			method: "PUT",
-			headers: {
-				"Content-Type": "application/json",
-			},
-			body: JSON.stringify(projectData),
-		}).then((res) => {
-			if (!res.ok) {
-				throw new Error("Failed to update project");
-			}
-			return res.json();
-		});
+		const projectDataWithStringId = {
+			...projectData,
+			id: projectId,
+		};
+
+		const updatePromise = updateProject(projectDataWithStringId);
 
 		showToast(updatePromise, {
 			loading: "Updating project...",
