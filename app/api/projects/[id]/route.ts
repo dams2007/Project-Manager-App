@@ -1,33 +1,28 @@
 // Import necessary modules from Next.js
-import { NextResponse } from "next/server";
-import { NextApiRequest } from "next";
+import { NextRequest, NextResponse } from "next/server";
+
+import connectMongoDB from "@/lib/mongoDB";
+import Product from "@/app/models/productShema";
 
 // Retrieve the base URL for the API from environment variables
-const baseURL = process.env.SERVER_BASE_URL;
+const baseURL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
-// Define the GET request handler
-export const GET = async (
-	request: NextApiRequest,
+export async function GET(
+	request: NextRequest,
 	{ params }: { params: { id: string } }
-) => {
+) {
+	await connectMongoDB();
 	// Extract the ID parameter from the request
 	const { id } = params;
 
 	try {
 		// Send a GET request to the external API to fetch product data by ID
-		const res = await fetch(`${baseURL}/products/${id}`, {
-			cache: "no-store",
-		});
-
+		const product = await Product.findById(id);
 		// Check if the response is OK
-		if (!res.ok) {
-			throw new Error("Network response was not ok");
+		if (!product) {
+			return NextResponse.json({ error: "Product not found" }, { status: 404 });
 		}
 
-		// Parse the response JSON
-		const product = await res.json();
-
-		// Return the product data as JSON
 		return NextResponse.json(product);
 	} catch (error: unknown) {
 		// Handle errors and return an appropriate error message
@@ -39,41 +34,42 @@ export const GET = async (
 		// Return the error message as JSON with a 500 status code
 		return NextResponse.json({ error: errorMessage }, { status: 500 });
 	}
-};
+}
 
-// Define the PUT request handler
-export async function PUT(request: Request) {
+export async function PUT(request: NextRequest) {
 	try {
+		await connectMongoDB();
+		console.log("MongoDB connected");
+
 		// Parse the request body JSON
 		const requestBody = await request.json();
-		const { id, createdAt, ...updateData } = requestBody;
+		console.log("Request body received:", requestBody);
 
+		const { _id, ...updateData } = requestBody;
 		// Check if the ID is provided
-		if (!id) {
-			throw new Error("ID is required");
+		if (!_id) {
+			console.log("ID is missing in the request body");
+			return NextResponse.json({ error: "ID is required" }, { status: 400 });
 		}
 
 		// Send a PUT request to the external API to update product data by ID
-		const res = await fetch(`${baseURL}/products/${id}`, {
-			method: "PUT",
-			headers: {
-				"Content-Type": "application/json",
-			},
-			body: JSON.stringify(updateData),
+		const updatedProduct = await Product.findByIdAndUpdate(_id, updateData, {
+			new: true,
 			cache: "no-store",
 		});
+		console.log("Updated product:", updatedProduct);
 
 		// Check if the response is OK
-		if (!res.ok) {
-			console.error("Network response was not ok", res.status, res.statusText);
-			throw new Error("Network response was not ok");
+		if (!updatedProduct) {
+			console.log("Product not found or update failed");
+			return NextResponse.json(
+				{ error: "Product not found or update failed" },
+				{ status: 404 }
+			);
 		}
 
-		// Parse the updated project data
-		const updatedProject = await res.json();
-
-		// Return the updated project data as JSON
-		return NextResponse.json(updatedProject);
+		// Return the updated product data as JSON
+		return NextResponse.json(updatedProduct, { status: 200 });
 	} catch (error: unknown) {
 		// Handle errors and return an appropriate error message
 		let errorMessage = "An unknown error occurred";

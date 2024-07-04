@@ -19,7 +19,7 @@ const getAllProjects = async (): Promise<ProjectResponse[]> => {
 		}
 		// Parse the response JSON
 		const projects = await res.json();
-		return projects.data;
+		return projects;
 	} catch (error) {
 		console.error("Error fetching projects:", error);
 		throw error;

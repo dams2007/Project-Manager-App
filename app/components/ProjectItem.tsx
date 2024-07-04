@@ -20,9 +20,9 @@ const ProjectItem = ({ project }: ProjectItemProps) => {
 
 	// Return the component JSX
 	return (
-		<Link href={`/editProject/${project.id}`}>
+		<Link href={`/editProject/${project._id}`}>
 			<li
-				key={project.id}
+				key={project._id}
 				className="bg-white border-b light:bg-gray-800 light:border-gray-700 hover:bg-gray-50 light:hover:bg-gray-600 h-20 flex items-center m-3 rounded-lg justify-between"
 			>
 				{/* Project title and icon */}
