@@ -2,12 +2,12 @@
 
 import { CreateProjectInput } from "@/app/types/CreateProjectInput";
 
-const baseURL = process.env.SERVER_BASE_URL;
+const baseURL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
 export const postProject = async (
 	newProject: CreateProjectInput
 ): Promise<void> => {
-	const response = await fetch(`${baseURL}/products`, {
+	const response = await fetch(`${baseURL}/api/projects`, {
 		method: "POST",
 		headers: {
 			"Content-Type": "application/json",
@@ -31,7 +31,7 @@ export async function updateProject(projectData: {
 	[key: string]: any;
 }) {
 	try {
-		const { id, createdAt, ...updateData } = projectData;
+		const { id, ...updateData } = projectData;
 
 		// Check if the ID is provided
 		if (!id) {
@@ -39,7 +39,7 @@ export async function updateProject(projectData: {
 		}
 
 		// Send a PUT request to the external API to update product data by ID
-		const res = await fetch(`${baseURL}/products/${id}`, {
+		const res = await fetch(`${baseURL}/api/projects/${id}`, {
 			method: "PUT",
 			headers: {
 				"Content-Type": "application/json",

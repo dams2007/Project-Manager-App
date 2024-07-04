@@ -36,7 +36,7 @@ const ProjectList: React.FC<ProjectListProps> = ({ projects }) => {
 					</li>
 					{/* Render a ProjectItem for each project in the projects array */}
 					{projects.map((project) => (
-						<ProjectItem key={project.id} project={project} />
+						<ProjectItem key={project._id} project={project} />
 					))}
 				</ul>
 			</div>

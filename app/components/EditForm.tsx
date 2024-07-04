@@ -58,18 +58,18 @@ const EditForm = ({ project, projectId }: EditFormProps) => {
 			ProjectStatusToEdit
 		] as ProjectStatus;
 
-		if (!project.id) {
+		if (!project._id) {
 			console.error("Project ID is required");
 			return;
 		}
 
 		// Create the project data object
 		const projectData: ProjectResponse = {
-			id: project.id,
+			_id: project._id,
 			title: ProjectNameToEdit,
 			description: ProjectDescToEdit,
 			status: statusConverted,
-			createdAt: null,
+			createdAt: project.createdAt,
 		};
 
 		const projectDataWithStringId = {
