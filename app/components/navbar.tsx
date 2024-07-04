@@ -10,7 +10,7 @@ const Navbar = () => {
 		>
 			<div className="flex lg:flex-1 h-9">
 				<a href="#" className="ml-12">
-					<span className="text-2xl">Lazuli Coding Test</span>
+					<span className="text-2xl">Project Manager</span>
 				</a>
 			</div>
 			<div className="ml-auto ">
